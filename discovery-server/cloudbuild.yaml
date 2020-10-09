@@ -1,0 +1,15 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'asia.gcr.io/fight-covid-283712/gcr-discovery-server:latest', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'asia.gcr.io/fight-covid-283712/gcr-discovery-server:latest']
+#  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+#    entrypoint: gcloud
+#    args: ['run', 'deploy', 'tdf-poc-service-discovery-server',
+#            '--port', '9000',
+#            '--platform', 'managed',
+#            '--region', 'asia-east1',
+#            '--allow-unauthenticated',
+#            '--image', 'asia.gcr.io/fight-covid-283712/gcr-discovery-server:latest']
+images:
+  - asia.gcr.io/fight-covid-283712/gcr-discovery-server:latest

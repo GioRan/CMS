@@ -1,0 +1,16 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'asia.gcr.io/fight-covid-283712/gcr-api-gateway:latest', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'asia.gcr.io/fight-covid-283712/gcr-api-gateway:latest']
+#  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+#    entrypoint: gcloud
+#    args: ['run', 'deploy', 'tdf-poc-service-api-gateway',
+#           '--port', '8000',
+#           '--platform', 'managed',
+#           '--region', 'asia-east1',
+#           '--memory', '1Gi',
+#           '--allow-unauthenticated',
+#           '--image', 'asia.gcr.io/fight-covid-283712/gcr-api-gateway:latest']
+images:
+  - asia.gcr.io/fight-covid-283712/gcr-api-gateway:latest

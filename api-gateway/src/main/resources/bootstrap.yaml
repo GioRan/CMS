@@ -1,0 +1,15 @@
+#server properties - port
+server:
+  port: 8000
+
+
+
+#spring properties - name, db connection
+spring:
+  application:
+    name: api-gateway
+  profiles:
+    active: local
+  cloud:
+    config:
+      uri: http://localhost:9000

@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: api-gateway
+  labels:
+    app: api-gateway
+
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway-container
+          image: asia.gcr.io/fight-covid-283712/gcr-api-gateway:latest
+          ports:
+            - containerPort: 8000

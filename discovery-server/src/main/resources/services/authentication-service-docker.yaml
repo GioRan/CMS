@@ -1,0 +1,49 @@
+server:
+  port: 8001
+  servlet:
+    contextPath: /authentication-service
+
+
+
+eureka:
+  instance:
+    instanceId: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${server.port}}}
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://discovery-server-tcp-service:9000/eureka/
+
+
+
+spring:
+  application:
+    name: authentication-service
+  datasource:
+    url: jdbc:mysql://34.80.4.224:3306/tdf_poc?autoReconnect=true&serverTimezone=UTC&useSSL=false
+    username: root
+    password: c7jDFzEbhy5qjOhx
+    driverClassName: com.mysql.cj.jdbc.Driver
+  jpa:
+    showSql: true
+    hibernate:
+      ddlAuto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+
+
+
+security:
+  jwt:
+    expiration: 3600000*24
+    secret: RbMCipPYzULnntg2NCgs1bcKukzCezuK
+
+
+
+default:
+  admin:
+    username: Gio
+    email: gio@gmail.com
+    password: 123

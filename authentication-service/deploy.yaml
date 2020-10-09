@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: authentication-service
+  labels:
+    app: authentication-service
+
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: authentication-service
+  template:
+    metadata:
+      labels:
+        app: authentication-service
+    spec:
+      containers:
+        - name: authentication-service-container
+          image: asia.gcr.io/fight-covid-283712/gcr-authentication-service:latest
+          ports:
+            - containerPort: 8001

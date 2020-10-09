@@ -1,0 +1,29 @@
+#server properties - port
+server:
+  port: 9000
+
+
+#spring properties - name
+spring:
+  application:
+    name: eureka-server
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        native:
+          searchLocations: classpath:services/
+
+
+#eureka properties - eureka admin, host
+eureka:
+  instance:
+    hostname: localhost
+  server:
+    maxThreadsForPeerReplication: 0
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/

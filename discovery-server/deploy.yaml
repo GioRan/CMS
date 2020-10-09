@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: discovery-server
+  labels:
+    app: discovery-server
+
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: discovery-server
+  template:
+    metadata:
+      labels:
+        app: discovery-server
+    spec:
+      containers:
+        - name: discovery-server-container
+          image: asia.gcr.io/fight-covid-283712/gcr-discovery-server:latest
+          ports:
+            - containerPort: 9000

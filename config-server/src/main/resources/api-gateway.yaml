@@ -1,0 +1,73 @@
+#spring properties - name, db connection
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/cms?autoReconnect=true&serverTimezone=UTC&useSSL=false
+    username: root
+    password: root
+    driverClassName: com.mysql.cj.jdbc.Driver
+    jpa:
+      showSql: true
+      hibernate:
+        ddlAuto: update
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+      database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+
+
+#zuul properties - routes to microservices
+zuul:
+  sensitiveHeaders: Cookie,Set-Cookie
+  ignoredServices: '*'
+  retryable: true
+  host:
+    connect-timeout-millis: 5000000
+    socket-timeout-millis: 5000000
+  routes:
+    authentication-service:
+      serviceId: authentication-service
+      path: /authentication-service/**
+      stripPrefix: false
+
+
+#ribbon properties - enable eureka
+ribbon:
+  eureka:
+    enabled: false
+
+
+#list of microservice urls
+authentication-service:
+  ribbon:
+    listOfServers: http://localhost:8001
+
+
+#eureka properties - eureka admin, host
+eureka:
+  instance:
+    hostname: localhost
+    instanceId: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${server.port}}}
+  client:
+    registerWithEureka: false
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:9000/eureka/
+
+
+#hystrix properties - for short circuit purposes
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+        timeout:
+          enabled: false
+
+
+#jwt unique ID - should be stored in secured external server in future
+security:
+  jwt:
+    expiration: 3600000*24
+    secret: RbMCipPYzULnntg2NCgs1bcKukzCezuK
