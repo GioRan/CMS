@@ -1,65 +1,67 @@
 package com.cms.gateway.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.Data;
+import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
+@Data
 @Entity
 @Table(name = "user")
 public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "user_id", columnDefinition = "INT(11) UNSIGNED NOT NULL")
     private Integer userId;
 
-    @Column(name = "username", columnDefinition = "VARCHAR(255)", nullable = false)
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(name = "user_uuid", columnDefinition = "VARCHAR(255) UNIQUE")
+    private String userUuid = UUID.randomUUID().toString();
+
+    @Column(name = "first_name", columnDefinition = "VARCHAR(255) NOT NULL")
+    private String firstName;
+
+    @Column(name = "last_name", columnDefinition = "VARCHAR(255) NOT NULL")
+    private String lastName;
+
+    @Formula(value = "CONCAT(first_name, ' ', last_name)")
+    private String fullName;
+
+    @Column(name = "username", columnDefinition = "VARCHAR(255) NOT NULL")
     private String username;
 
-    @Column(name = "email", columnDefinition = "VARCHAR(255)", nullable = false)
-    private String email;
+    @Column(name = "email_address", columnDefinition = "VARCHAR(255) NOT NULL")
+    private String emailAddress;
 
-    @Column(name = "password", columnDefinition = "VARCHAR(255)", nullable = false)
+    @Column(name = "password", columnDefinition = "VARCHAR(255) NOT NULL")
     private String password;
+
+    @Column(name = "date_registered", columnDefinition = "INT(11) NOT NULL")
+    private Long dateRegistered;
+
+    @Column(name = "last_logged_in", columnDefinition = "INT(11) DEFAULT NULL")
+    private Long lastLoggedIn;
+
+    @Column(name = "last_updated", columnDefinition = "INT(11) DEFAULT NULL")
+    private Long lastUpdated;
 
     @JsonBackReference
     @ManyToMany
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<RoleEntity> roles;
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setRoles(List<RoleEntity> roles) {
-        this.roles = roles;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -100,5 +102,17 @@ public class UserEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @PrePersist
+    private void prePersist(){
+        LocalDateTime time = LocalDateTime.now();
+        dateRegistered = time.toEpochSecond(ZoneOffset.UTC);
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        LocalDateTime time = LocalDateTime.now();
+        lastUpdated = time.toEpochSecond(ZoneOffset.UTC);
     }
 }

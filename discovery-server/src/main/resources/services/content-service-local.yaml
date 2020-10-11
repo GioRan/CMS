@@ -62,13 +62,3 @@ hystrix:
             timeoutInMilliseconds: 10000
         timeout:
           enabled: false
-
-
-#authority initializer properties
-default:
-  admin:
-    firstname: Gio
-    lastname: Gio
-    username: Gio
-    email: gio@gmail.com
-    password: 123
